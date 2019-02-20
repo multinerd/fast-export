@@ -30,8 +30,9 @@ class FormioExport {
     }
 
     this.component = null;
-    this.data = {};
+    this.data = [];
     this.options = {};
+    this.structure = [];
 
     if (options.hasOwnProperty('formio')) {
       this.options = _.cloneDeep(options.formio);
@@ -49,21 +50,21 @@ class FormioExport {
       this.data = data;
     }
 
-    if (FormioExportUtils.isFormioSubmission(this.data)) {
-      this.options.submission = {
-        id: this.data._id,
-        owner: this.data.owner,
-        modified: this.data.modified
-      };
-      this.data = this.data.data;
-    }
-
     if (this.component) {
       if (FormioExportUtils.isFormioForm(this.component) || FormioExportUtils.isFormioWizard(this.component)) {
         this.component.type = 'form';
         this.component.display = 'form';
       }
-      this.component = FormioComponent.create(component || this.component, this.data, this.options);
+      _.each(this.data, (value, key) => {
+        if (FormioExportUtils.isFormioSubmission(value)) {
+          this.options.submission = {
+            id: value._id,
+            owner: value.owner,
+            modified: value.modified
+          };
+        }
+        this.structure.push(FormioComponent.create(component || this.component, value.data, this.options));
+      });
     } else if (!this.component) {
       console.warn(this.constructor.name, 'no component defined');
     }
@@ -79,7 +80,7 @@ class FormioExport {
   toHtml () {
     return new Promise((resolve, reject) => {
       try {
-        toHtml(this.component).then((html) => resolve(html));
+        toHtml(this.structure).then((html) => resolve(html));
       } catch (error) {
         reject(error);
       }
