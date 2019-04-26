@@ -23,10 +23,10 @@ class FormioExport {
    * @param {any} [options={}] Formio optional parameters
    * @memberof FormioExport
    */
-  constructor (component, data, options = {}) {
+  constructor (pdfArray) {
 
     if (!(this instanceof FormioExport)) {
-      return new FormioExport(component, data);
+      return new FormioExport(pdfArray);
     }
 
     this.component = null;
@@ -34,41 +34,31 @@ class FormioExport {
     this.options = {};
     this.structure = [];
 
-    if (options.hasOwnProperty('formio')) {
-      this.options = _.cloneDeep(options.formio);
-    }
+    _.each(pdfArray, (value, key) => {
+      this.component = value.component;
+      this.data = value.submission;
+      this.options = value.option;
 
-    if (options.hasOwnProperty('component')) {
-      this.component = options.component;
-    } else if (component) {
-      this.component = component;
-    }
-
-    if (options.hasOwnProperty('data')) {
-      this.data = options.data;
-    } else if (!_.isNil(data)) {
-      this.data = data;
-    }
-
-    if (this.component) {
-      if (FormioExportUtils.isFormioForm(this.component) || FormioExportUtils.isFormioWizard(this.component)) {
-        this.component.type = 'form';
-        this.component.display = 'form';
-      }
-      _.each(this.data, (value, key) => {
-        if (FormioExportUtils.isFormioSubmission(value)) {
-          this.options.submission = {
-            id: value._id,
-            owner: value.owner,
-            modified: value.modified
-          };
+      if (this.component) {
+        if (FormioExportUtils.isFormioForm(this.component) || FormioExportUtils.isFormioWizard(this.component)) {
+          this.component.type = 'form';
+          this.component.display = 'form';
         }
-        this.structure.push(FormioComponent.create(component || this.component, value.data, this.options));
-      });
-    } else if (!this.component) {
-      console.warn(this.constructor.name, 'no component defined');
-    }
+        _.each(this.data, (value, key) => {
+          if (FormioExportUtils.isFormioSubmission(value)) {
+            this.options.submission = {
+              id: value._id,
+              owner: value.owner,
+              modified: value.modified
+            };
+          }
+          this.structure.push(FormioComponent.create(this.component, value.data, this.options));
+        });
+      } else if (!this.component) {
+        console.warn(this.constructor.name, 'no component defined');
+      }
 
+    });
   }
 
   /**

@@ -18,7 +18,8 @@ export default (element, component) => {
     _.forEach(component._value, (file) => {
       if (_.isObject(file)) {
         if (file.type.indexOf('image/') === 0) {
-          valueElement.appendChild(FormioExportUtils.createElement('img', { src: file.url, class: 'img-responsive' }));
+          valueElement.appendChild(FormioExportUtils.createElement('img', { src: file.url,
+            class: 'img-responsive img-size' }));
         } else {
           valueElement.innerHTML = `${file.name} (${file.size / 1024} KB)`;
         }
