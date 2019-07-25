@@ -31,6 +31,9 @@ import FormComponent from './form';
 import ColumnsComponent from './columns';
 import PanelComponent from './panel';
 import FieldSetComponent from './fieldset';
+import ContentComponent from './content';
+import HTMLElementComponent from './html';
+import TableComponent from './table';
 
 import UnknownComponent from './unknown';
 
@@ -53,6 +56,7 @@ const FormioComponent = {
   resource: ResourceComponent,
   survey: SurveyComponent,
   file: FileComponent,
+  content: ContentComponent,
   signature: SignatureComponent,
   container: ContainerComponent,
   datagrid: DataGridComponent,
@@ -62,6 +66,8 @@ const FormioComponent = {
   fieldset: FieldSetComponent,
   unknown: UnknownComponent,
   form: FormComponent,
+  htmlelement: HTMLElementComponent,
+  table: TableComponent,
   create: (component, data, options) => {
     let c = null;
 
