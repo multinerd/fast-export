@@ -10,7 +10,7 @@ class NumberComponent extends BaseComponent {
     if (_.isNil(this._value)) {
       return this.emptyValue();
     }
-    return this._value.toLocaleString();
+    return this._value.toString();
   }
 }
 

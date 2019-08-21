@@ -14,7 +14,8 @@ export default (element, component) => {
       class: 'col component-value'
     }, component.formatValue());
 
-    if (!component.hideLabel && (!component.inDataGrid || component.dataGridLabel)) {
+    if ((!component.hideLabel && (!component.inDataGrid || component.dataGridLabel)) ||
+      (component.customClass && component.customClass === 'show-report')) {
       labelElement.className += component._options.equalCols ? '' : ' col-sm-3';
       valueElement.className += component._options.equalCols ? '' : ' col-sm-9';
       componentElement.appendChild(labelElement);
