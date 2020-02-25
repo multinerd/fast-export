@@ -16,7 +16,7 @@ export default (element, component) => {
     });
 
     valueElement.innerHTML = component.content;
-    if (!component.hideLabel || (component.customClass && component.customClass !== 'hide-report')) {
+    if (component.customClass && component.customClass !== 'hide-report') {
       componentElement.appendChild(labelElement);
     }
     componentElement.appendChild(valueElement);

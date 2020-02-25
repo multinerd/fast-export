@@ -10,9 +10,6 @@ export default (element, component) => {
 
     _.forEach(component.components, (c) => {
       if (c) {
-        if (c.customClass && c.customClass === 'hide-report') {
-          return;
-        }
         c.toHtml(element);
       }
     });
