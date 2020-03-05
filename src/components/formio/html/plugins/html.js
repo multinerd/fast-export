@@ -16,10 +16,20 @@ export default (element, component) => {
     });
 
     valueElement.innerHTML = component.content;
-    if (component.customClass && component.customClass !== 'hide-report') {
+    let classes;
+
+    if (component.customClass) {
+      classes = component.customClass.split(' ');
+    }
+    if (component.customClass && !classes.includes('hide-report')) {
       componentElement.appendChild(labelElement);
     }
-    componentElement.appendChild(valueElement);
+    if (component.customClass && !classes.includes('hide-content')) {
+      componentElement.appendChild(valueElement);
+    }
+    if (component.customClass && classes.includes('hide-content')) {
+      return null;
+    }
 
     if (_.isElement(element)) {
       element.appendChild(componentElement);
